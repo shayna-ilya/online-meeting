@@ -1,10 +1,10 @@
 import React from 'react';
-import { Map, TileLayer, ZoomControl, CircleMarker, useLeaflet, LeafletContext, withLeaflet } from 'react-leaflet';
+import { Map, TileLayer, ZoomControl, CircleMarker, useLeaflet, LeafletContext, Marker, Popup } from 'react-leaflet';
 import Control from 'react-leaflet-control';
 import ReactLeafletSearch from 'react-leaflet-search';
 import NavigationIcon from '@material-ui/icons/Navigation';
 import { Fab } from '@material-ui/core';
-import { LatLngExpression } from 'leaflet';
+import { LatLngExpression, LeafletMouseEvent } from 'leaflet';
 
 const MapContextRef: React.ForwardRefExoticComponent<any> = React.forwardRef((props, ref) => {
   const leaflet = useLeaflet();
@@ -14,9 +14,10 @@ const MapContextRef: React.ForwardRefExoticComponent<any> = React.forwardRef((pr
 
 const mapCenter: LatLngExpression = [55.751999, 37.617734];
 
-const MapView: React.FC = () => {
+export const MapView: React.FC = () => {
   const [userPosition, setUserPosition] = React.useState<LatLngExpression | undefined>();
   const map = React.useRef<LeafletContext>();
+  const [addMessageMarker, setAddMessageMarker] = React.useState<LatLngExpression | undefined>();
 
   const handleFindMyPositionButtonClick = React.useCallback(() => {
     navigator.geolocation.getCurrentPosition(
@@ -30,8 +31,12 @@ const MapView: React.FC = () => {
     );
   }, [map]);
 
+  const handleMapClick = React.useCallback((e: LeafletMouseEvent) => {
+    setAddMessageMarker(e.latlng);
+  }, []);
+
   return (
-    <Map center={mapCenter} zoom={8}>
+    <Map center={mapCenter} zoom={8} onClick={handleMapClick}>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -39,6 +44,13 @@ const MapView: React.FC = () => {
       <ZoomControl position="topleft" />
       <ReactLeafletSearch zoom={10} position="topleft" />
       {userPosition && <CircleMarker radius={20} center={userPosition} />}
+      {addMessageMarker && (
+        <Marker position={addMessageMarker}>
+          <Popup>
+            <span>Popup</span>
+          </Popup>
+        </Marker>
+      )}
       <Control position="bottomright">
         <Fab onClick={handleFindMyPositionButtonClick} color="secondary" aria-label="edit">
           <NavigationIcon />
@@ -48,5 +60,3 @@ const MapView: React.FC = () => {
     </Map>
   );
 };
-
-export const MapView2 = withLeaflet(MapView);
