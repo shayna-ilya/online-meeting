@@ -3,10 +3,11 @@ import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
 import { TextField } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
+import Container from '@material-ui/core/Container';
+import Button from '@material-ui/core/Button';
 import { drawerWidth } from '../../constants';
 
 const useStyles = makeStyles(theme => ({
@@ -25,6 +26,22 @@ const useStyles = makeStyles(theme => ({
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end',
   },
+  drawerContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+  },
+  messagesContainer: {
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  messageInput: {
+    width: '100%',
+    marginRight: 20,
+  },
 }));
 
 type Props = {
@@ -35,6 +52,11 @@ type Props = {
 export const AppDrawer: React.FC<Props> = ({ isOpen, onClose }) => {
   const classes = useStyles();
   const theme = useTheme();
+  const [messageFieldValue, setMessageFieldValue] = React.useState<string>();
+
+  const handleMessageFieldChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setMessageFieldValue(event.target.value);
+  }, []);
 
   return (
     <Drawer
@@ -52,16 +74,22 @@ export const AppDrawer: React.FC<Props> = ({ isOpen, onClose }) => {
         </IconButton>
       </div>
       <Divider />
-      <List>
-        <TextField
-          id="standard-multiline-flexible"
-          label="Multiline"
-          multiline
-          rowsMax={4}
-          value={228}
-          onChange={() => 'void'}
-        />
-      </List>
+      <Container maxWidth="sm" className={classes.drawerContainer}>
+        <div className={classes.messagesContainer}>
+          <TextField
+            id="standard-multiline-flexible"
+            className={classes.messageInput}
+            label="Ваше сообщение"
+            multiline
+            rowsMax={4}
+            value={messageFieldValue}
+            onChange={handleMessageFieldChange}
+          />
+          <Button variant="contained" color="primary">
+            Отправить
+          </Button>
+        </div>
+      </Container>
     </Drawer>
   );
 };
