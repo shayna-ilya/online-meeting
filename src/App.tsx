@@ -1,17 +1,18 @@
 import React from 'react';
 import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { MapView } from './components/map';
 import { getAddNewMessageMarkerCoordinates } from './store/ducks/messages/selectors';
 import { drawerWidth } from './constants';
 import { AppDrawer } from './components/drawer';
+import { getAllMessages } from './store/ducks/messages/actions';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -40,6 +41,11 @@ const App = () => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const addMessageMarker = useSelector(getAddNewMessageMarkerCoordinates);
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(getAllMessages.request());
+  }, [dispatch]);
 
   React.useEffect(() => {
     if (addMessageMarker) {

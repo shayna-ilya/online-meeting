@@ -4,7 +4,7 @@ import Control from 'react-leaflet-control';
 import ReactLeafletSearch from 'react-leaflet-search';
 import NavigationIcon from '@material-ui/icons/Navigation';
 import { Fab } from '@material-ui/core';
-import { LatLngExpression, LeafletMouseEvent } from 'leaflet';
+import { LatLngTuple, LeafletMouseEvent } from 'leaflet';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAddNewMessageMarkerCoordinates } from '../../store/ducks/messages/selectors';
 import { setNewMessageMarkerCoordinates } from '../../store/ducks/messages/actions';
@@ -15,10 +15,10 @@ const MapContextRef: React.ForwardRefExoticComponent<any> = React.forwardRef((pr
   return <></>;
 });
 
-const mapCenter: LatLngExpression = [55.751999, 37.617734];
+const mapCenter: LatLngTuple = [55.751999, 37.617734];
 
 export const MapView: React.FC = () => {
-  const [userPosition, setUserPosition] = React.useState<LatLngExpression | undefined>();
+  const [userPosition, setUserPosition] = React.useState<LatLngTuple | undefined>();
   const map = React.useRef<LeafletContext>();
   const addMessageMarker = useSelector(getAddNewMessageMarkerCoordinates);
   const dispatch = useDispatch();
@@ -37,7 +37,7 @@ export const MapView: React.FC = () => {
 
   const handleMapClick = React.useCallback(
     (e: LeafletMouseEvent) => {
-      dispatch(setNewMessageMarkerCoordinates(e.latlng));
+      dispatch(setNewMessageMarkerCoordinates([e.latlng.lat, e.latlng.lng]));
     },
     [dispatch],
   );

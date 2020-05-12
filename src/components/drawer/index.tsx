@@ -8,7 +8,10 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
+import { useDispatch, useSelector } from 'react-redux';
 import { drawerWidth } from '../../constants';
+import { addMessage, getAllMessages } from '../../store/ducks/messages/actions';
+import { getAddNewMessageMarkerCoordinates } from '../../store/ducks/messages/selectors';
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -53,10 +56,25 @@ export const AppDrawer: React.FC<Props> = ({ isOpen, onClose }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [messageFieldValue, setMessageFieldValue] = React.useState<string>();
+  const newMessageMarkerCoordinates = useSelector(getAddNewMessageMarkerCoordinates);
+  const dispatch = useDispatch();
 
   const handleMessageFieldChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setMessageFieldValue(event.target.value);
   }, []);
+
+  const handleSendButtonPress = React.useCallback(() => {
+    if (newMessageMarkerCoordinates) {
+      dispatch(
+        addMessage.request({
+          email: 'example@vasya.ru',
+          message: String(messageFieldValue),
+          latitude: newMessageMarkerCoordinates[0],
+          longitude: newMessageMarkerCoordinates[1],
+        }),
+      );
+    }
+  }, [dispatch, messageFieldValue, newMessageMarkerCoordinates]);
 
   return (
     <Drawer
@@ -85,7 +103,7 @@ export const AppDrawer: React.FC<Props> = ({ isOpen, onClose }) => {
             value={messageFieldValue}
             onChange={handleMessageFieldChange}
           />
-          <Button variant="contained" color="primary">
+          <Button variant="contained" onClick={handleSendButtonPress} color="primary">
             Отправить
           </Button>
         </div>
