@@ -10,12 +10,31 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     inline: {
       display: 'inline',
+      fontSize: 16,
     },
   }),
 );
 
-export const DrawerMessagesListItem: React.FC = () => {
+type Props = {
+  date: Date,
+  description: string,
+  userEmail?: string,
+};
+
+export const DrawerMessagesListItem: React.FC<Props> = ({ date, description, userEmail }) => {
   const classes = useStyles();
+
+  const getUserInfo = () => userEmail || 'Аноним';
+
+  const renderMessageDate = () => {
+    const options = {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+    };
+
+    return new Date(date).toLocaleDateString('ru-RU', options);
+  };
 
   return (
     <ListItem alignItems="flex-start">
@@ -23,13 +42,13 @@ export const DrawerMessagesListItem: React.FC = () => {
         <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
       </ListItemAvatar>
       <ListItemText
-        primary="Brunch this weekend?"
+        primary={renderMessageDate()}
         secondary={
           <>
             <Typography component="span" variant="body2" className={classes.inline} color="textPrimary">
-              Ali Connors
+              {getUserInfo()}
             </Typography>
-            {" — I'll be in your neighborhood doing errands this…"}
+            {` - ${description}`}
           </>
         }
       />
