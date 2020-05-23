@@ -13,6 +13,8 @@ import { getAddNewMessageMarkerCoordinates } from './store/ducks/messages/select
 import { drawerWidth } from './constants';
 import { AppDrawer } from './components/drawer';
 import { getAllMessages } from './store/ducks/messages/actions';
+import { Putin } from './components/putin';
+import { DollarRate } from './components/dollar-rate';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -20,6 +22,12 @@ const useStyles = makeStyles(theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+  },
+  appBarContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
@@ -70,20 +78,24 @@ const App = () => {
           [classes.appBarShift]: open,
         })}
       >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, open && classes.hide)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            ← Принять участие
-          </Typography>
-        </Toolbar>
+        <div className={classes.appBarContainer}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              className={clsx(classes.menuButton, open && classes.hide)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap>
+              ← Принять участие
+            </Typography>
+          </Toolbar>
+          <Putin />
+          <DollarRate />
+        </div>
       </AppBar>
       <AppDrawer isOpen={open} onClose={handleDrawerClose} />
       <main>
