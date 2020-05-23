@@ -103,11 +103,12 @@ export const AppDrawer: React.FC<Props> = ({ isOpen, onClose }) => {
             error={fieldHasError}
             id={fieldHasError ? 'standard-error-helper-text' : 'standard-multiline-flexible'}
             className={classes.messageInput}
-            label={fieldHasError ? 'Не менее 1 символа' : 'Ваше сообщение'}
+            label="Сообщение"
             multiline
             rowsMax={4}
             value={messageFieldValue}
             onChange={handleMessageFieldChange}
+            helperText={fieldHasError ? 'Введите сообщение' : ''}
           />
           <Button variant="contained" onClick={handleSendButtonPress} color="primary">
             Отправить
