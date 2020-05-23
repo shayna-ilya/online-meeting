@@ -1,5 +1,5 @@
 import React from 'react';
-import { Map, TileLayer, ZoomControl, CircleMarker, useLeaflet, LeafletContext } from 'react-leaflet';
+import { Map, TileLayer, ZoomControl, CircleMarker, useLeaflet, LeafletContext, Marker, Popup } from 'react-leaflet';
 import Control from 'react-leaflet-control';
 import ReactLeafletSearch from 'react-leaflet-search';
 import NavigationIcon from '@material-ui/icons/Navigation';
@@ -53,6 +53,7 @@ export const MapView: React.FC = () => {
       <ZoomControl position="topleft" />
       <ReactLeafletSearch zoom={10} position="topleft" />
       {userPosition && <CircleMarker radius={20} center={userPosition} />}
+      {addMessageMarker && <Marker position={addMessageMarker} />}
       {allMessages.map(messageItem => {
         return (
           <MessageMarker
