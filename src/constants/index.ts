@@ -1,2 +1,2 @@
-export const drawerWidth = 480;
+export const drawerWidth = 580;
 export const backendURL = 'http://localhost:3001';

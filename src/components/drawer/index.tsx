@@ -10,8 +10,9 @@ import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { drawerWidth } from '../../constants';
-import { addMessage, getAllMessages } from '../../store/ducks/messages/actions';
+import { addMessage } from '../../store/ducks/messages/actions';
 import { getAddNewMessageMarkerCoordinates } from '../../store/ducks/messages/selectors';
+import { DrawerMessagesList } from '../drawer-messages-list';
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -31,8 +32,6 @@ const useStyles = makeStyles(theme => ({
   },
   drawerContainer: {
     display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
     flexDirection: 'column',
   },
   messagesContainer: {
@@ -106,6 +105,9 @@ export const AppDrawer: React.FC<Props> = ({ isOpen, onClose }) => {
           <Button variant="contained" onClick={handleSendButtonPress} color="primary">
             Отправить
           </Button>
+        </div>
+        <div>
+          <DrawerMessagesList />
         </div>
       </Container>
     </Drawer>
