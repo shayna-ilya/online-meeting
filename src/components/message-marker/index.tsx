@@ -16,7 +16,7 @@ const useStyle = makeStyles(theme => ({
     flexDirection: 'column',
     alignItems: 'flex-start',
   },
-  likeIconWrapper: {
+  likeButton: {
     marginTop: 8,
     padding: 0,
     backgroundColor: 'transparent',
@@ -43,7 +43,7 @@ export const MessageMarker: React.FC<Props> = props => {
       <Popup>
         <div className={classes.messageContainer}>
           <span>{message}</span>
-          <button type="button" onClick={onLikeClick} className={classes.likeIconWrapper}>
+          <button type="button" onClick={onLikeClick} className={classes.likeButton}>
             <FavoriteBorderOutlinedIcon className={classes.likeIcon} />
           </button>
         </div>
