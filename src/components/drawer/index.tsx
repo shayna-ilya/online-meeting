@@ -78,6 +78,7 @@ export const AppDrawer: React.FC<Props> = ({ isOpen, onClose }) => {
           longitude: newMessageMarkerCoordinates[1],
         }),
       );
+      setMessageFieldValue('');
     }
   }, [dispatch, messageFieldValue, newMessageMarkerCoordinates]);
 
