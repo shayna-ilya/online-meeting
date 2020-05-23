@@ -55,15 +55,21 @@ export const AppDrawer: React.FC<Props> = ({ isOpen, onClose }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [messageFieldValue, setMessageFieldValue] = React.useState<string>();
+  const [fieldHasError, setFieldHasError] = React.useState<boolean>(false);
   const newMessageMarkerCoordinates = useSelector(getAddNewMessageMarkerCoordinates);
   const dispatch = useDispatch();
 
   const handleMessageFieldChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setMessageFieldValue(event.target.value);
+    setFieldHasError(!event.target.value);
   }, []);
 
   const handleSendButtonPress = React.useCallback(() => {
-    if (newMessageMarkerCoordinates) {
+    if (!messageFieldValue) {
+      setFieldHasError(true);
+    }
+
+    if (newMessageMarkerCoordinates && !fieldHasError) {
       dispatch(
         addMessage.request({
           email: 'example@vasya.ru',
@@ -94,9 +100,10 @@ export const AppDrawer: React.FC<Props> = ({ isOpen, onClose }) => {
       <Container maxWidth="sm" className={classes.drawerContainer}>
         <div className={classes.messagesContainer}>
           <TextField
-            id="standard-multiline-flexible"
+            error={fieldHasError}
+            id={fieldHasError ? 'standard-error-helper-text' : 'standard-multiline-flexible'}
             className={classes.messageInput}
-            label="Ваше сообщение"
+            label={fieldHasError ? 'Не менее 1 символа' : 'Ваше сообщение'}
             multiline
             rowsMax={4}
             value={messageFieldValue}
