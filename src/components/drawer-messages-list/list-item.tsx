@@ -21,13 +21,10 @@ type Props = {
   userEmail?: string,
 };
 
-export const DrawerMessagesListItem: React.FC<Props> = props => {
-  const { date, description, userEmail } = props;
+export const DrawerMessagesListItem: React.FC<Props> = ({ date, description, userEmail }) => {
   const classes = useStyles();
 
-  const getUserInfo = () => {
-    return userEmail || 'Аноним';
-  };
+  const getUserInfo = () => userEmail || 'Аноним';
 
   const renderMessageDate = () => {
     const options = {

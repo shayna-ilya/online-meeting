@@ -27,16 +27,16 @@ export const List: React.FC<Props> = ({ messages }) => {
 
   return (
     <MaterialList className={classes.root}>
-      {messages.map(messageItem => {
+      {messages.map((messageItem, index) => {
         return (
           /* eslint-disable-next-line no-underscore-dangle */
           <div key={messageItem._id}>
-            <Divider variant="inset" component="li" />
             <DrawerMessagesListItem
               date={messageItem.createdAt}
               description={messageItem.message}
               userEmail={messageItem.email}
             />
+            {index !== messages.length - 1 && <Divider variant="inset" component="li" />}
           </div>
         );
       })}
