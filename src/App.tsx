@@ -5,8 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import PersonIcon from '@material-ui/icons/Person';
 import { useDispatch, useSelector } from 'react-redux';
 import { MapView } from './components/map';
 import { getAddNewMessageMarkerCoordinates } from './store/ducks/messages/selectors';
@@ -15,6 +14,7 @@ import { AppDrawer } from './components/drawer';
 import { getAllMessages } from './store/ducks/messages/actions';
 import { Putin } from './components/putin';
 import { DollarRate } from './components/dollar-rate';
+import { SignInModal } from './components/sign-in-modal';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -37,17 +37,16 @@ const useStyles = makeStyles(theme => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-  menuButton: {
+  profileButton: {
     marginRight: theme.spacing(2),
-  },
-  hide: {
-    display: 'none',
+    cursor: 'pointer',
   },
 }));
 
 const App = () => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
+  const [signInModalIsOpen, setSignInModalIsOpen] = React.useState(false);
   const addMessageMarker = useSelector(getAddNewMessageMarkerCoordinates);
   const dispatch = useDispatch();
 
@@ -57,16 +56,20 @@ const App = () => {
 
   React.useEffect(() => {
     if (addMessageMarker) {
-      setOpen(true);
+      setDrawerIsOpen(true);
     }
   }, [addMessageMarker]);
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
+  const handleDrawerClose = () => {
+    setDrawerIsOpen(false);
   };
 
-  const handleDrawerClose = () => {
-    setOpen(false);
+  const handleSignInModalOpen = () => {
+    setSignInModalIsOpen(true);
+  };
+
+  const handleSignInModalClose = () => {
+    setSignInModalIsOpen(false);
   };
 
   return (
@@ -75,20 +78,12 @@ const App = () => {
       <AppBar
         position="fixed"
         className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
+          [classes.appBarShift]: drawerIsOpen,
         })}
       >
         <div className={classes.appBarContainer}>
           <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              className={clsx(classes.menuButton, open && classes.hide)}
-            >
-              <MenuIcon />
-            </IconButton>
+            <PersonIcon className={classes.profileButton} onClick={handleSignInModalOpen} />
             <Typography variant="h6" noWrap>
               ← Принять участие
             </Typography>
@@ -97,7 +92,8 @@ const App = () => {
           <DollarRate />
         </div>
       </AppBar>
-      <AppDrawer isOpen={open} onClose={handleDrawerClose} />
+      <AppDrawer isOpen={drawerIsOpen} onClose={handleDrawerClose} />
+      <SignInModal isOpen={signInModalIsOpen} onClose={handleSignInModalClose} />
       <main>
         <MapView />
       </main>
