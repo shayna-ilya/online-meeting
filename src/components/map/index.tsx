@@ -1,5 +1,6 @@
 import React from 'react';
-import { Map, TileLayer, ZoomControl, CircleMarker, useLeaflet, LeafletContext, Marker, Popup } from 'react-leaflet';
+import { Map, TileLayer, ZoomControl, CircleMarker, useLeaflet, LeafletContext, Marker } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-markercluster';
 import Control from 'react-leaflet-control';
 import ReactLeafletSearch from 'react-leaflet-search';
 import NavigationIcon from '@material-ui/icons/Navigation';
@@ -54,19 +55,21 @@ export const MapView: React.FC = () => {
       <ReactLeafletSearch zoom={10} position="topleft" />
       {userPosition && <CircleMarker radius={20} center={userPosition} />}
       {addMessageMarker && <Marker position={addMessageMarker} />}
-      {allMessages.map(messageItem => {
-        return (
-          <MessageMarker
-            /* eslint-disable-next-line no-underscore-dangle */
-            key={messageItem._id}
-            message={messageItem.message}
-            onLikeClick={() => {
-              console.log('likeclick');
-            }}
-            position={[messageItem.latitude, messageItem.longitude]}
-          />
-        );
-      })}
+      <MarkerClusterGroup>
+        {allMessages.map(messageItem => {
+          return (
+            <MessageMarker
+              /* eslint-disable-next-line no-underscore-dangle */
+              key={messageItem._id}
+              message={messageItem.message}
+              onLikeClick={() => {
+                console.log('likeclick');
+              }}
+              position={[messageItem.latitude, messageItem.longitude]}
+            />
+          );
+        })}
+      </MarkerClusterGroup>
       <Control position="bottomright">
         <Fab onClick={handleFindMyPositionButtonClick} color="secondary" aria-label="edit">
           <NavigationIcon />
