@@ -5,6 +5,7 @@ import ReactLeafletSearch from 'react-leaflet-search';
 import NavigationIcon from '@material-ui/icons/Navigation';
 import { Fab } from '@material-ui/core';
 import { LatLngTuple, LeafletMouseEvent } from 'leaflet';
+import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAddNewMessageMarkerCoordinates, getAllMessages } from '../../store/ducks/messages/selectors';
 import { setNewMessageMarkerCoordinates } from '../../store/ducks/messages/actions';
