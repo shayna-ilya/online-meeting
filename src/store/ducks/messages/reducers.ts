@@ -1,7 +1,7 @@
 import { createReducer } from 'typesafe-actions';
 import produce from 'immer';
 import { MessagesState } from './types';
-import { getAllMessages, setNewMessageMarkerCoordinates } from './actions';
+import { addMessage, getAllMessages, setNewMessageMarkerCoordinates } from './actions';
 
 const initialState: MessagesState = {
   addNewMessageMarkerCoordinates: undefined,
@@ -17,5 +17,10 @@ export const messagesReducer = createReducer(initialState)
   .handleAction(getAllMessages.success, (state, action) =>
     produce(state, draft => {
       draft.messages = action.payload;
+    }),
+  )
+  .handleAction(addMessage.success, (state, action) =>
+    produce(state, draft => {
+      draft.messages.unshift(action.payload);
     }),
   );

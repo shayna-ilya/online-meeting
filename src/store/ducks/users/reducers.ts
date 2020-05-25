@@ -8,7 +8,7 @@ const initialState: UsersState = {
   userName: undefined,
 };
 
-export const usersReducer = createReducer(initialState).handleAction(setUserData, (state, action) =>
+export const userReducer = createReducer(initialState).handleAction(setUserData, (state, action) =>
   produce(state, draft => {
     draft.email = action.payload.email;
     draft.userName = action.payload.userName;

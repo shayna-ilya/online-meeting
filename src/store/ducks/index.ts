@@ -5,7 +5,7 @@ import { messagesReducer } from './messages/reducers';
 import * as messagesActions from './messages/actions';
 import * as usersActions from './users/actions';
 import { watchMessagesSagas } from './messages/sagas';
-import { usersReducer } from './users/reducers';
+import { userReducer } from './users/reducers';
 import { UsersState } from './users/types';
 
 export type Store = {
@@ -15,7 +15,7 @@ export type Store = {
 
 export const rootReducer = combineReducers<Store>({
   messages: messagesReducer,
-  user: usersReducer,
+  user: userReducer,
 });
 
 export const rootAction = {
