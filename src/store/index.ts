@@ -8,7 +8,7 @@ import { rootReducer, rootSaga } from './ducks';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['example'],
+  whitelist: ['example, usersReducer'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

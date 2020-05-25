@@ -1,9 +1,11 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import MaterialList from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import { MessageDTO } from '../../store/ducks/messages/types';
 import { DrawerMessagesListItem } from './list-item';
+import { getUserEmail, getUserName } from '../../store/ducks/users/selectors';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,6 +25,8 @@ type Props = {
 
 export const List: React.FC<Props> = ({ messages }) => {
   const classes = useStyles();
+  const userName = useSelector(getUserName);
+  const email = useSelector(getUserEmail);
 
   return (
     <MaterialList className={classes.root}>
@@ -33,7 +37,7 @@ export const List: React.FC<Props> = ({ messages }) => {
             <DrawerMessagesListItem
               date={messageItem.createdAt}
               description={messageItem.message}
-              userEmail={messageItem.email}
+              userInfo={userName || email}
             />
             {index !== messages.length - 1 && <Divider variant="inset" component="li" />}
           </div>

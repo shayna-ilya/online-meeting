@@ -1,5 +1,5 @@
 import React from 'react';
-import { Map, TileLayer, ZoomControl, CircleMarker, useLeaflet, LeafletContext, Marker, Popup } from 'react-leaflet';
+import { Map, TileLayer, ZoomControl, CircleMarker, useLeaflet, LeafletContext, Marker } from 'react-leaflet';
 import Control from 'react-leaflet-control';
 import ReactLeafletSearch from 'react-leaflet-search';
 import NavigationIcon from '@material-ui/icons/Navigation';
