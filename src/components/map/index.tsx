@@ -54,19 +54,21 @@ export const MapView: React.FC = () => {
       <ReactLeafletSearch zoom={10} position="topleft" />
       {userPosition && <CircleMarker radius={20} center={userPosition} />}
       {addMessageMarker && <Marker position={addMessageMarker} />}
-      {allMessages.map(messageItem => {
-        return (
-          <MessageMarker
-            /* eslint-disable-next-line no-underscore-dangle */
-            key={messageItem._id}
-            message={messageItem.message}
-            onLikeClick={() => {
-              console.log('likeclick');
-            }}
-            position={[messageItem.latitude, messageItem.longitude]}
-          />
-        );
-      })}
+      <MarkerClusterGroup>
+        {allMessages.map(messageItem => {
+          return (
+            <MessageMarker
+              /* eslint-disable-next-line no-underscore-dangle */
+              key={messageItem._id}
+              message={messageItem.message}
+              onLikeClick={() => {
+                console.log('likeclick');
+              }}
+              position={[messageItem.latitude, messageItem.longitude]}
+            />
+          );
+        })}
+      </MarkerClusterGroup>
       <Control position="bottomright">
         <Fab onClick={handleFindMyPositionButtonClick} color="secondary" aria-label="edit">
           <NavigationIcon />
