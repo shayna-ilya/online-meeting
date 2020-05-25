@@ -1,11 +1,12 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import { TextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setUserData } from '../../store/ducks/users/actions';
+import { getUserEmail, getUserName } from '../../store/ducks/users/selectors';
 
 const useStyles = makeStyles(theme => ({
   modal: {
@@ -13,7 +14,7 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  paper: {
+  form: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -40,33 +41,39 @@ type Props = {
 
 export const SignInModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const classes = useStyles();
-  const [emailFieldValue, setEmailFieldValue] = useState();
-  const [usernameFieldValue, setUsernameFieldValue] = useState();
-  const [emailFieldHasError, setEmailFieldHasError] = useState(false);
-  const [usernameFieldHasError, setUsernameFieldHasError] = useState(false);
   const dispatch = useDispatch();
+  const email = useSelector(getUserEmail);
+  const userName = useSelector(getUserName);
+  const [emailFieldValue, setEmailFieldValue] = useState();
+  const [userNameFieldValue, setUserNameFieldValue] = useState();
+  const [emailFieldValueHasError, setEmailFieldValueHasError] = useState();
+  const [userNameFieldValueHasError, setUserNameFieldValueHasError] = useState();
+
+  useEffect(() => {
+    setEmailFieldValue(email || undefined);
+    setUserNameFieldValue(userName || undefined);
+  }, [email, userName]);
+
+  const isValidEmail = () => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(emailFieldValue);
+
+  const isValidUserName = () => !!userNameFieldValue;
 
   const handleEmailFieldChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setEmailFieldValue(event.target.value);
-    if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(event.target.value)) {
-      setEmailFieldHasError(true);
-    } else {
-      setEmailFieldHasError(false);
-    }
   }, []);
 
   const handleUsernameFieldChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setUsernameFieldValue(event.target.value);
-    if (!event.target.value) {
-      setUsernameFieldHasError(true);
-    } else {
-      setUsernameFieldHasError(false);
-    }
+    setUserNameFieldValue(event.target.value);
   }, []);
 
   const handleSendButtonClick = () => {
-    dispatch(setUserData(usernameFieldValue, emailFieldValue));
-    onClose();
+    if (isValidUserName() && isValidEmail()) {
+      dispatch(setUserData(userNameFieldValue, emailFieldValue));
+      onClose();
+    }
+
+    setEmailFieldValueHasError(!isValidEmail());
+    setUserNameFieldValueHasError(!isValidUserName());
   };
 
   return (
@@ -83,34 +90,28 @@ export const SignInModal: React.FC<Props> = ({ isOpen, onClose }) => {
           timeout: 500,
         }}
       >
-        <div className={classes.paper}>
+        <form className={classes.form} action="" autoComplete="off">
           <TextField
-            error={emailFieldHasError}
+            error={emailFieldValueHasError}
             label="Email"
             value={emailFieldValue}
             onChange={handleEmailFieldChange}
-            rowsMax={4}
             variant="outlined"
+            defaultValue={email || ''}
           />
           <TextField
-            error={usernameFieldHasError}
+            error={userNameFieldValueHasError}
             label="Username"
-            value={usernameFieldValue}
+            value={userNameFieldValue}
             onChange={handleUsernameFieldChange}
-            rowsMax={4}
             variant="outlined"
             className={classes.usernameField}
+            defaultValue={userName || ''}
           />
-          <Button
-            disabled={usernameFieldHasError || emailFieldHasError}
-            className={classes.sendButton}
-            variant="contained"
-            color="primary"
-            onClick={handleSendButtonClick}
-          >
+          <Button className={classes.sendButton} variant="contained" color="primary" onClick={handleSendButtonClick}>
             Отправить
           </Button>
-        </div>
+        </form>
       </Modal>
     </div>
   );
