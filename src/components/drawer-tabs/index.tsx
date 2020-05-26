@@ -20,8 +20,8 @@ export const DrawerTabs: React.FC<Props> = ({ tabValue, onChange, indicatorColor
       textColor={textColor || 'primary'}
       centered={centered || true}
     >
-      {tabLabels.map((label: string, index: number) => (
-        <Tab key={`${value}-${label}`} label={label} />
+      {tabLabels.map((label: string) => (
+        <Tab key={`${tabValue}-${label}`} label={label} />
       ))}
     </Tabs>
   );
