@@ -44,15 +44,10 @@ export const SignInModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
   const email = useSelector(getUserEmail);
   const userName = useSelector(getUserName);
-  const [emailFieldValue, setEmailFieldValue] = useState();
-  const [userNameFieldValue, setUserNameFieldValue] = useState();
+  const [emailFieldValue, setEmailFieldValue] = useState(email || '');
+  const [userNameFieldValue, setUserNameFieldValue] = useState(userName || '');
   const [emailFieldValueHasError, setEmailFieldValueHasError] = useState();
   const [userNameFieldValueHasError, setUserNameFieldValueHasError] = useState();
-
-  useEffect(() => {
-    setEmailFieldValue(email || undefined);
-    setUserNameFieldValue(userName || undefined);
-  }, [email, userName]);
 
   const isValidEmail = () => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(emailFieldValue);
 

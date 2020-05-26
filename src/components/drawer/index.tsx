@@ -80,7 +80,7 @@ export const AppDrawer: React.FC<Props> = ({ isOpen, onClose }) => {
     setFieldHasError(!event.target.value);
   }, []);
 
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+  const handleTabValueChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setTab(newValue);
   };
 
@@ -138,7 +138,11 @@ export const AppDrawer: React.FC<Props> = ({ isOpen, onClose }) => {
           </div>
           <Paper className={classes.paper}>
             <div className={classes.tabsWrapper}>
-              <DrawerTabs value={tab} onChange={handleChange} tabsLabels={['Последние', 'Популярные', 'Мои']} />
+              <DrawerTabs
+                tabValue={tab}
+                onChange={handleTabValueChange}
+                tabLabels={['Последние', 'Популярные', 'Мои']}
+              />
             </div>
           </Paper>
         </ListSubheader>
