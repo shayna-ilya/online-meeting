@@ -3,7 +3,7 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 
 type Props = {
-  tabValue: number,
+  activeTabIndex: number,
   onChange(event: React.ChangeEvent<{}>, newValue: number): void,
   indicatorColor?: 'primary' | 'secondary',
   textColor?: 'primary' | 'secondary' | 'inherit',
@@ -11,17 +11,24 @@ type Props = {
   tabLabels: string[],
 };
 
-export const DrawerTabs: React.FC<Props> = ({ tabValue, onChange, indicatorColor, textColor, centered, tabLabels }) => {
+export const DrawerTabs: React.FC<Props> = ({
+  activeTabIndex,
+  onChange,
+  indicatorColor,
+  textColor,
+  centered,
+  tabLabels,
+}) => {
   return (
     <Tabs
-      value={tabValue}
+      value={activeTabIndex}
       onChange={onChange}
       indicatorColor={indicatorColor || 'primary'}
       textColor={textColor || 'primary'}
       centered={centered || true}
     >
       {tabLabels.map((label: string) => (
-        <Tab key={`${tabValue}-${label}`} label={label} />
+        <Tab key={`${activeTabIndex}-${label}`} label={label} />
       ))}
     </Tabs>
   );

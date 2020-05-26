@@ -12,12 +12,17 @@ export type ErrorDTO = {
 };
 
 export type MessageDTO = {
+  readonly likes: number,
   readonly email: string;
   readonly message: string;
   readonly latitude: number;
   readonly longitude: number;
   readonly createdAt: Date;
   readonly _id: string;
+};
+
+export type AddLikeRequestDTO = {
+  id: string,
 };
 
 export type GetAllMessagesDTO = MessageDTO[] | ErrorDTO;

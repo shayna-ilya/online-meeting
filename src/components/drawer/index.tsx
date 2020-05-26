@@ -15,6 +15,7 @@ import { addMessage } from '../../store/ducks/messages/actions';
 import { getAddNewMessageMarkerCoordinates } from '../../store/ducks/messages/selectors';
 import { DrawerMessagesList } from '../drawer-messages-list';
 import { DrawerTabs } from '../drawer-tabs';
+import { getUserEmail, getUserName } from '../../store/ducks/users/selectors';
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -70,9 +71,10 @@ export const AppDrawer: React.FC<Props> = ({ isOpen, onClose }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [messageFieldValue, setMessageFieldValue] = React.useState<string>();
-  const [tab, setTab] = React.useState(0);
+  const [activeTabIndex, setActiveTabIndex] = React.useState(0);
   const [fieldHasError, setFieldHasError] = React.useState<boolean>(false);
   const newMessageMarkerCoordinates = useSelector(getAddNewMessageMarkerCoordinates);
+  const email = useSelector(getUserEmail);
   const dispatch = useDispatch();
 
   const handleMessageFieldChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,8 +82,8 @@ export const AppDrawer: React.FC<Props> = ({ isOpen, onClose }) => {
     setFieldHasError(!event.target.value);
   }, []);
 
-  const handleTabValueChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    setTab(newValue);
+  const handleActiveTabIndexChange = (event: React.ChangeEvent<{}>, newActiveTabIndex: number) => {
+    setActiveTabIndex(newActiveTabIndex);
   };
 
   const handleSendButtonPress = React.useCallback(() => {
@@ -92,10 +94,11 @@ export const AppDrawer: React.FC<Props> = ({ isOpen, onClose }) => {
     if (newMessageMarkerCoordinates && !fieldHasError) {
       dispatch(
         addMessage.request({
-          email: 'example@vasya.ru',
+          email: email || '',
           message: String(messageFieldValue),
           latitude: newMessageMarkerCoordinates[0],
           longitude: newMessageMarkerCoordinates[1],
+          likes: 0,
         }),
       );
       setMessageFieldValue('');
@@ -139,8 +142,8 @@ export const AppDrawer: React.FC<Props> = ({ isOpen, onClose }) => {
           <Paper className={classes.paper}>
             <div className={classes.tabsWrapper}>
               <DrawerTabs
-                tabValue={tab}
-                onChange={handleTabValueChange}
+                activeTabIndex={activeTabIndex}
+                onChange={handleActiveTabIndexChange}
                 tabLabels={['Последние', 'Популярные', 'Мои']}
               />
             </div>

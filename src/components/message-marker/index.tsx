@@ -3,11 +3,13 @@ import { LatLngTuple } from 'leaflet';
 import { Marker, Popup } from 'react-leaflet';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import { MessageDTO } from '../../store/ducks/messages/types';
 
 type Props = {
-  message: string,
+  message: MessageDTO,
   position: LatLngTuple,
-  onLikeClick(): void,
+  onLikeClick(message: MessageDTO): void,
+  likesCount: number,
 };
 
 const useStyle = makeStyles(theme => ({
@@ -34,17 +36,19 @@ const useStyle = makeStyles(theme => ({
   },
 }));
 
-export const MessageMarker: React.FC<Props> = props => {
-  const { message, position, onLikeClick } = props;
+export const MessageMarker: React.FC<Props> = ({ message, position, onLikeClick, likesCount }) => {
   const classes = useStyle();
+
+  const handleLikeClick = React.useCallback(() => onLikeClick(message), [message, onLikeClick]);
 
   return (
     <Marker position={position}>
       <Popup>
         <div className={classes.messageContainer}>
-          <span>{message}</span>
-          <button type="button" onClick={onLikeClick} className={classes.likeButton}>
+          <span>{message.message}</span>
+          <button type="button" onClick={handleLikeClick} className={classes.likeButton}>
             <FavoriteBorderOutlinedIcon className={classes.likeIcon} />
+            <span>{likesCount}</span>
           </button>
         </div>
       </Popup>
