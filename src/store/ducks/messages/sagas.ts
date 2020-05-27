@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
-import { addMessage, getAllMessages } from './actions';
+import { addLike, addMessage, getAllMessages } from './actions';
 import { callApi } from '../../../utils/api';
 import { MessageDTO } from './types';
 
@@ -21,7 +21,17 @@ function* getAllMessagesSaga(action: ReturnType<typeof getAllMessages.request>):
   }
 }
 
+function* addLikeSaga(action: ReturnType<typeof addLike.request>): Generator {
+  try {
+    const response = yield call(callApi, 'put', '/message/like', action.payload);
+    yield put(addLike.success(response as MessageDTO));
+  } catch (e) {
+    yield put(addLike.failure(e));
+  }
+}
+
 export function* watchMessagesSagas() {
   yield takeEvery(addMessage.request, addMessageSaga);
   yield takeEvery(getAllMessages.request, getAllMessagesSaga);
+  yield takeEvery(addLike.request, addLikeSaga);
 }

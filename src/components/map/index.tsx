@@ -1,15 +1,16 @@
 import React from 'react';
 import { Map, TileLayer, ZoomControl, CircleMarker, useLeaflet, LeafletContext, Marker } from 'react-leaflet';
-import MarkerClusterGroup from 'react-leaflet-markercluster';
 import Control from 'react-leaflet-control';
 import ReactLeafletSearch from 'react-leaflet-search';
 import NavigationIcon from '@material-ui/icons/Navigation';
 import { Fab } from '@material-ui/core';
 import { LatLngTuple, LeafletMouseEvent } from 'leaflet';
+import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAddNewMessageMarkerCoordinates, getAllMessages } from '../../store/ducks/messages/selectors';
-import { setNewMessageMarkerCoordinates } from '../../store/ducks/messages/actions';
+import { addLike, setNewMessageMarkerCoordinates } from '../../store/ducks/messages/actions';
 import { MessageMarker } from '../message-marker';
+import { MessageDTO } from '../../store/ducks/messages/types';
 
 const MapContextRef: React.ForwardRefExoticComponent<any> = React.forwardRef((props, ref) => {
   const leaflet = useLeaflet();
@@ -45,6 +46,14 @@ export const MapView: React.FC = () => {
     [dispatch],
   );
 
+  const handleLikeClick = React.useCallback(
+    (message: MessageDTO) => {
+      // eslint-disable-next-line no-underscore-dangle
+      dispatch(addLike.request({ id: message._id }));
+    },
+    [dispatch],
+  );
+
   return (
     <Map center={mapCenter} zoom={8} onClick={handleMapClick}>
       <TileLayer
@@ -61,11 +70,10 @@ export const MapView: React.FC = () => {
             <MessageMarker
               /* eslint-disable-next-line no-underscore-dangle */
               key={messageItem._id}
-              message={messageItem.message}
-              onLikeClick={() => {
-                console.log('likeclick');
-              }}
+              message={messageItem}
+              onLikeClick={handleLikeClick}
               position={[messageItem.latitude, messageItem.longitude]}
+              likesCount={messageItem.likes}
             />
           );
         })}

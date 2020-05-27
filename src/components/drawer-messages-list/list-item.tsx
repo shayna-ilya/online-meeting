@@ -18,13 +18,13 @@ const useStyles = makeStyles((theme: Theme) =>
 type Props = {
   date: Date,
   description: string,
-  userEmail?: string,
+  userInfo?: string,
 };
 
-export const DrawerMessagesListItem: React.FC<Props> = ({ date, description, userEmail }) => {
+export const DrawerMessagesListItem: React.FC<Props> = ({ date, description, userInfo }) => {
   const classes = useStyles();
 
-  const getUserInfo = () => userEmail || 'Аноним';
+  const getUserInfo = () => userInfo || 'Аноним';
 
   const renderMessageDate = () => {
     const options = {
