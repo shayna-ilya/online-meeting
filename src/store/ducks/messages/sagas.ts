@@ -21,8 +21,10 @@ function* getAllMessagesSaga(action: ReturnType<typeof getAllMessages.request>):
   }
 }
 
-// TODO: Here's a hint for you
+// TODO: Here's a hint for you for the getMyMessages method
 // const response = yield call(callApi, 'get', `/message/messages/my?email=${email}`);
+// TODO below is for getPopular messages
+// const response = yield call(callApi, 'get', `/message/messages/popular}`);
 
 function* addLikeSaga(action: ReturnType<typeof addLike.request>): Generator {
   try {
